@@ -428,7 +428,11 @@
         <div class="illust">
           <img src="https://bannerbear.com/images/ghost/2026-01-21-how-to-install-claude-code-terminal-ide-web-desktop-setup/1.png" alt="Claude Code 起動画面">
         </div>
-        <div class="info-box">💡 「command not found」と出たら、まずターミナルを一度閉じて開き直してください。<br>それでも出る場合は以下をコピペして Enter！
+        <div class="info-box">💡 こんな画面が出たら…
+          <div class="illust" style="margin:8px 0;">
+            <img src="command-not-found.png" alt="command not found エラー" style="border-radius:8px;border:1px solid #333;">
+          </div>
+          まずターミナルを一度閉じて開き直してください。<br>それでも出る場合は以下をコピペして Enter！
           <div class="code-block" style="margin-top:8px;">
             <code>echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc</code>
             <button class="copy-btn" onclick="copyPathFix(this)">コピー</button>
