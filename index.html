@@ -336,7 +336,7 @@
     <div class="step-card active" id="card-1">
       <div class="step-header">
         <div class="step-num" id="num-1">1</div>
-        <div class="step-title">ターミナルを開く</div>
+        <div class="step-title" id="title-1">ターミナルを開く</div>
       </div>
       <div class="step-body" id="body-mac-1">
         <p><strong>⌘ + Space</strong> を押して「ターミナル」と入力 → Enter</p>
@@ -508,6 +508,8 @@
           el.classList.toggle('hidden', o !== os);
         });
       });
+      const t1 = document.getElementById('title-1');
+      if (t1) t1.textContent = os === 'windows' ? 'PowerShell を開く' : 'ターミナルを開く';
     }
 
     function completeStep(n) {
