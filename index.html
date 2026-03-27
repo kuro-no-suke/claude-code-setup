@@ -428,7 +428,12 @@
         <div class="illust">
           <img src="https://bannerbear.com/images/ghost/2026-01-21-how-to-install-claude-code-terminal-ide-web-desktop-setup/1.png" alt="Claude Code 起動画面">
         </div>
-        <div class="info-box">💡 「command not found」と出たら、ターミナルを一度閉じて開き直してください。</div>
+        <div class="info-box">💡 「command not found」と出たら、まずターミナルを一度閉じて開き直してください。<br>それでも出る場合は以下をコピペして Enter！
+          <div class="code-block" style="margin-top:8px;">
+            <code>echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc</code>
+            <button class="copy-btn" onclick="copyPathFix(this)">コピー</button>
+          </div>
+        </div>
       </div>
       <div class="step-body hidden" id="body-windows-3">
         <p>PowerShell に入力して Enter！</p>
@@ -536,6 +541,10 @@
         box.style.display = 'block';
         setTimeout(() => box.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
       }
+    }
+
+    function copyPathFix(btn) {
+      copyCode(btn, "echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.zshrc && source ~/.zshrc");
     }
 
     function copyCode(btn, text) {
