@@ -366,19 +366,18 @@
           <code>curl -fsSL https://claude.ai/install.sh | bash</code>
           <button class="copy-btn" onclick="copyCode(this, 'curl -fsSL https://claude.ai/install.sh | bash')">コピー</button>
         </div>
-        <p>こんな文字が流れます。止まったら完了です。</p>
+        <div class="warn-box" style="margin-bottom:0;">⚠️ Enter を押すと、しばらく<strong>画面に何も表示されません</strong>（ダウンロード中）。固まったように見えますが正常です。そのまま待ってください。</div>
         <div class="illust">
-          <svg viewBox="0 0 660 160" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;">
-            <rect width="660" height="160" fill="#1a1a1a"/>
+          <svg viewBox="0 0 660 150" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;">
+            <rect width="660" height="150" fill="#1a1a1a"/>
             <rect width="660" height="28" fill="#2a2a2a"/>
             <circle cx="16" cy="14" r="5" fill="#ff5f57"/>
             <circle cx="32" cy="14" r="5" fill="#febc2e"/>
             <circle cx="48" cy="14" r="5" fill="#28c840"/>
             <text x="14" y="52" font-family="monospace" font-size="12" fill="#aaa">$ curl -fsSL https://claude.ai/install.sh | bash</text>
-            <text x="14" y="72" font-family="monospace" font-size="12" fill="#4ade80">✓ Downloading Claude Code...</text>
-            <text x="14" y="90" font-family="monospace" font-size="12" fill="#4ade80">✓ Installing...</text>
-            <text x="14" y="108" font-family="monospace" font-size="12" fill="#4ade80">✓ Claude Code installed successfully!</text>
-            <text x="14" y="126" font-family="monospace" font-size="12" fill="#aaa">$ <tspan fill="#555">←ここで止まったら完了</tspan></text>
+            <text x="14" y="76" font-family="monospace" font-size="12" fill="#888">Setting up Claude Code...</text>
+            <text x="14" y="100" font-family="monospace" font-size="12" fill="#4ade80">✅ Installation complete!</text>
+            <text x="14" y="124" font-family="monospace" font-size="12" fill="#aaa">$ <tspan fill="#555">← ここで止まったら完了！</tspan></text>
           </svg>
         </div>
       </div>
