@@ -383,12 +383,30 @@
         </div>
       </div>
       <div class="step-body hidden" id="body-windows-2">
-        <p>以下を PowerShell にコピペして Enter！</p>
+        <p><strong>① まず Git Bash をインストール</strong></p>
+        <p>以下のサイトから「Git for Windows」をダウンロードしてインストールしてください：</p>
+        <p><a href="https://git-scm.com/downloads/win" target="_blank">git-scm.com/downloads/win</a></p>
+        <p>インストーラーは「Next」を押し続けるだけで OK です。</p>
+        <p style="margin-top:16px;"><strong>② Claude Code をインストール</strong></p>
+        <p>PowerShell にコピペして Enter！</p>
         <div class="code-block">
           <code>irm https://claude.ai/install.ps1 | iex</code>
           <button class="copy-btn" onclick="copyCode(this, 'irm https://claude.ai/install.ps1 | iex')">コピー</button>
         </div>
         <p>文字が流れて止まったら完了です。</p>
+        <p style="margin-top:16px;"><strong>③ Path（環境変数）の設定</strong></p>
+        <p>インストール後、以下のフォルダを Path に追加する必要があります：</p>
+        <div class="code-block">
+          <code>C:\Users\【ユーザー名】\.local\bin</code>
+          <button class="copy-btn" onclick="copyCode(this, 'C:\\Users\\【ユーザー名】\\.local\\bin')">コピー</button>
+        </div>
+        <div class="warn-box">⚠️ 【ユーザー名】はご自身のPC のユーザー名に置き換えてください。<br>例：<code>C:\Users\admin\.local\bin</code></div>
+        <p><strong>Path の追加手順：</strong></p>
+        <p>① <code>Win + R</code> → <code>sysdm.cpl</code> と入力 → Enter<br>
+        ② 「詳細設定」タブ → 「環境変数」をクリック<br>
+        ③ 上段「ユーザー環境変数」の「Path」を選択 → 「編集」<br>
+        ④ 「新規」→ 上記パスを入力 → OK → OK</p>
+        <p>設定後は PowerShell を<strong>一度閉じて開き直して</strong>ください。</p>
       </div>
       <button class="check-btn" onclick="completeStep(2)">✓ 完了！次へ</button>
     </div>
