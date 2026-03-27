@@ -461,48 +461,19 @@
           <strong>方法②</strong>：Finder → アプリケーション → ユーティリティ → ターミナル.app
         </p>
 
-        <!-- SVG: Spotlight -->
+        <p><strong>① ⌘ + Space</strong> を押すと Spotlight が開きます：</p>
         <div class="illust">
-          <svg viewBox="0 0 560 195" xmlns="http://www.w3.org/2000/svg">
-            <rect width="560" height="195" fill="#1c1c1e"/>
-            <defs>
-              <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#2d2d2f"/>
-                <stop offset="100%" stop-color="#1c1c1e"/>
-              </linearGradient>
-            </defs>
-            <rect width="560" height="195" fill="url(#bgGrad)" opacity="0.5"/>
-
-            <!-- キーボードショートカット説明 -->
-            <rect x="160" y="16" width="240" height="30" rx="8" fill="#2c2c2e" stroke="#3a3a3c" stroke-width="1"/>
-            <text x="280" y="36" font-family="-apple-system,sans-serif" font-size="14" fill="#e0e0e0" text-anchor="middle">⌘ + Space を押す</text>
-
-            <!-- Spotlight バー -->
-            <rect x="80" y="58" width="400" height="52" rx="14" fill="#2c2c2e" stroke="#5a5a5e" stroke-width="1.5"/>
-            <text x="106" y="90" font-size="20" fill="#888">🔍</text>
-            <text x="138" y="90" font-family="-apple-system,sans-serif" font-size="18" fill="#f0f0f0">ターミナル</text>
-            <rect x="256" y="70" width="2" height="20" fill="#0a84ff">
-              <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
-            </rect>
-
-            <!-- 結果パネル -->
-            <rect x="80" y="118" width="400" height="56" rx="10" fill="#2a2a2c" stroke="#3a3a3c" stroke-width="1"/>
-            <rect x="84" y="121" width="392" height="30" rx="8" fill="#0a84ff22"/>
-            <!-- アイコン -->
-            <rect x="96" y="126" width="22" height="22" rx="5" fill="#1c1c1e" stroke="#444" stroke-width="1"/>
-            <text x="107" y="141" font-size="11" fill="#aaa" text-anchor="middle">$_</text>
-            <text x="130" y="141" font-family="-apple-system,sans-serif" font-size="14" fill="#f0f0f0" font-weight="600">ターミナル</text>
-            <text x="380" y="141" font-family="-apple-system,sans-serif" font-size="11" fill="#0a84ff">アプリケーション</text>
-
-            <!-- Enter キー -->
-            <rect x="444" y="124" width="26" height="18" rx="4" fill="#3a3a3c" stroke="#555" stroke-width="1"/>
-            <text x="457" y="136" font-family="monospace" font-size="9" fill="#ccc" text-anchor="middle">↩</text>
-
-            <text x="280" y="186" font-family="-apple-system,sans-serif" font-size="11" fill="#555" text-anchor="middle">Enter を押してターミナルを開く</text>
-          </svg>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Spotlight_in_OS_X_Yosemite_2.png"
+               alt="macOS Spotlight 検索画面" style="width:100%;display:block;" loading="lazy">
         </div>
 
-        <p>黒または白い画面が開いたら成功です！</p>
+        <p><strong>②「ターミナル」</strong>と入力して Enter を押すと、こんな画面が開きます：</p>
+        <div class="illust">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Terminal_Running_Top_on_macOS_Sonoma.png"
+               alt="macOS ターミナル画面" style="width:100%;display:block;" loading="lazy">
+        </div>
+
+        <p>この画面が開いたら成功です！</p>
       </div>
 
       <!-- Windows -->
@@ -570,36 +541,10 @@
           </div>
         </div>
 
-        <!-- SVG: インストール中の画面 -->
+        <p>実行するとこんな画面が流れます。止まったら完了です：</p>
         <div class="illust">
-          <svg viewBox="0 0 560 155" xmlns="http://www.w3.org/2000/svg">
-            <rect width="560" height="155" rx="10" fill="#0d0d0d"/>
-            <rect width="560" height="30" rx="10" fill="#1e1e1e"/>
-            <rect y="20" width="560" height="10" fill="#1e1e1e"/>
-            <circle cx="18" cy="15" r="5" fill="#ff5f57"/>
-            <circle cx="36" cy="15" r="5" fill="#febc2e"/>
-            <circle cx="54" cy="15" r="5" fill="#28c840"/>
-            <text x="280" y="20" font-family="monospace" font-size="10" fill="#444" text-anchor="middle">ターミナル</text>
-
-            <text x="14" y="54" font-family="monospace" font-size="11" fill="#888">$ curl -fsSL https://claude.ai/install.sh | bash</text>
-            <text x="14" y="74" font-family="monospace" font-size="11" fill="#4ade80">✓ Downloading Claude Code...</text>
-            <text x="14" y="90" font-family="monospace" font-size="11" fill="#4ade80">✓ Installing to /usr/local/bin/claude</text>
-            <text x="14" y="106" font-family="monospace" font-size="11" fill="#4ade80">✓ Installation complete!</text>
-
-            <!-- プログレスバー風 -->
-            <rect x="14" y="118" width="420" height="8" rx="4" fill="#2a2a2a"/>
-            <rect x="14" y="118" width="420" height="8" rx="4" fill="url(#installGrad)">
-              <animate attributeName="width" from="0" to="420" dur="2s" repeatCount="indefinite"/>
-            </rect>
-            <defs>
-              <linearGradient id="installGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#a78bfa"/>
-                <stop offset="100%" stop-color="#60a5fa"/>
-              </linearGradient>
-            </defs>
-
-            <text x="14" y="146" font-family="sans-serif" font-size="11" fill="#555">インストール中… 止まったら完了です</text>
-          </svg>
+          <img src="https://bannerbear.com/images/ghost/2026-01-21-how-to-install-claude-code-terminal-ide-web-desktop-setup/0.png"
+               alt="Claude Code インストール中の画面" style="width:100%;display:block;" loading="lazy">
         </div>
 
         <div class="faq-section">
@@ -668,30 +613,10 @@
         </div>
         <p>起動すると利用規約の確認画面が出ます。<strong>そのまま Enter を押して</strong>進んでください。</p>
 
-        <!-- SVG: 起動画面 -->
+        <p>起動するとこんな画面が出ます：</p>
         <div class="illust">
-          <svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg">
-            <rect width="560" height="190" rx="10" fill="#0d0d0d"/>
-            <rect width="560" height="30" rx="10" fill="#1a1a1a"/>
-            <rect y="20" width="560" height="10" fill="#1a1a1a"/>
-            <circle cx="18" cy="15" r="5" fill="#ff5f57"/>
-            <circle cx="36" cy="15" r="5" fill="#febc2e"/>
-            <circle cx="54" cy="15" r="5" fill="#28c840"/>
-            <text x="280" y="20" font-family="monospace" font-size="10" fill="#444" text-anchor="middle">ターミナル</text>
-
-            <text x="14" y="54" font-family="monospace" font-size="12" fill="#888">$ claude</text>
-
-            <text x="14" y="76" font-family="monospace" font-size="12" fill="#a78bfa">  ╔════════════════════╗</text>
-            <text x="14" y="92" font-family="monospace" font-size="12" fill="#a78bfa">  ║   Claude Code  ✦  ║</text>
-            <text x="14" y="108" font-family="monospace" font-size="12" fill="#a78bfa">  ╚════════════════════╝</text>
-
-            <text x="14" y="130" font-family="monospace" font-size="12" fill="#aaa">How would you like to login?</text>
-            <rect x="14" y="138" width="290" height="22" rx="4" fill="#3b1f6e"/>
-            <text x="22" y="153" font-family="monospace" font-size="12" fill="#c4b5fd">❯ 1. Claude.ai subscription (Pro/Max)</text>
-            <text x="22" y="173" font-family="monospace" font-size="12" fill="#555">  2. Anthropic API key</text>
-
-            <text x="316" y="150" font-family="sans-serif" font-size="11" fill="#a78bfa">← そのまま Enter ！</text>
-          </svg>
+          <img src="https://bannerbear.com/images/ghost/2026-01-21-how-to-install-claude-code-terminal-ide-web-desktop-setup/1.png"
+               alt="Claude Code 起動・ログイン選択画面" style="width:100%;display:block;" loading="lazy">
         </div>
 
         <div class="info-box">
@@ -746,51 +671,10 @@
         <p>ログイン方法の選択画面が出たら：</p>
         <p>👉 <strong>「Claude.ai subscription」を選んで Enter</strong></p>
 
-        <!-- SVG: ブラウザ自動起動 -->
+        <p>ログインするとこんな画面になります：</p>
         <div class="illust">
-          <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg">
-            <!-- ターミナル -->
-            <rect width="252" height="210" fill="#111"/>
-            <rect width="252" height="28" fill="#1e1e1e"/>
-            <circle cx="14" cy="14" r="5" fill="#ff5f57"/>
-            <circle cx="30" cy="14" r="5" fill="#febc2e"/>
-            <circle cx="46" cy="14" r="5" fill="#28c840"/>
-            <text x="126" y="19" font-family="monospace" font-size="10" fill="#444" text-anchor="middle">ターミナル</text>
-            <text x="12" y="52" font-family="monospace" font-size="11" fill="#888">$ claude</text>
-            <text x="12" y="70" font-family="monospace" font-size="10" fill="#a78bfa">Opening browser...</text>
-            <text x="12" y="87" font-family="monospace" font-size="10" fill="#555">Waiting for auth...</text>
-            <rect x="12" y="93" width="8" height="13" fill="#a78bfa">
-              <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
-            </rect>
-
-            <!-- 矢印 -->
-            <text x="258" y="108" font-family="sans-serif" font-size="10" fill="#60a5fa" text-anchor="middle">自動で</text>
-            <text x="258" y="120" font-family="sans-serif" font-size="10" fill="#60a5fa" text-anchor="middle">ブラウザが</text>
-            <text x="258" y="132" font-family="sans-serif" font-size="10" fill="#60a5fa" text-anchor="middle">開く →</text>
-
-            <!-- ブラウザ -->
-            <rect x="276" y="10" width="270" height="192" rx="8" fill="#f8f8f8" stroke="#ddd" stroke-width="1"/>
-            <rect x="276" y="10" width="270" height="28" rx="8" fill="#e8e8e8"/>
-            <rect x="276" y="28" width="270" height="10" fill="#e8e8e8"/>
-            <circle cx="290" cy="24" r="5" fill="#ff5f57"/>
-            <circle cx="304" cy="24" r="5" fill="#febc2e"/>
-            <circle cx="318" cy="24" r="5" fill="#28c840"/>
-            <rect x="332" y="16" width="196" height="16" rx="8" fill="#fff" stroke="#ccc" stroke-width="1"/>
-            <text x="430" y="28" font-family="monospace" font-size="9" fill="#999" text-anchor="middle">claude.ai/auth</text>
-
-            <rect x="276" y="38" width="270" height="164" fill="#fff"/>
-            <text x="411" y="75" font-family="sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="middle">Claude にログイン</text>
-
-            <rect x="306" y="86" width="210" height="30" rx="6" fill="#f0f0f0" stroke="#e0e0e0" stroke-width="1"/>
-            <text x="411" y="106" font-family="sans-serif" font-size="12" fill="#555" text-anchor="middle">G  Googleでログイン</text>
-
-            <rect x="306" y="124" width="210" height="30" rx="6" fill="#f0f0f0" stroke="#e0e0e0" stroke-width="1"/>
-            <text x="411" y="144" font-family="sans-serif" font-size="12" fill="#555" text-anchor="middle">✉  メールでログイン</text>
-
-            <!-- 認証ボタン -->
-            <rect x="306" y="165" width="210" height="30" rx="8" fill="#d97706"/>
-            <text x="411" y="184" font-family="sans-serif" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">✓ 認証する ← クリック！</text>
-          </svg>
+          <img src="https://bannerbear.com/images/ghost/2026-01-21-how-to-install-claude-code-terminal-ide-web-desktop-setup/2.png"
+               alt="Claude Code ログイン完了・使用可能な状態" style="width:100%;display:block;" loading="lazy">
         </div>
 
         <div class="info-box">
