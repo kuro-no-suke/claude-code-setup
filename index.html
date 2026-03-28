@@ -477,31 +477,72 @@
         <p>自動でブラウザが開くので、Claude.ai にログインして「認証する」をクリック。</p>
         <div class="info-box">💡 課金後はターミナルを一度閉じて開き直してから起動するとスムーズです。</div>
       </div>
-      <button class="check-btn" onclick="completeStep(4)">✓ ログインできた！</button>
+      <button class="check-btn" onclick="completeStep(4)">✓ ログインできた！次へ</button>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card" id="card-5">
+      <div class="step-header">
+        <div class="step-num" id="num-5">5</div>
+        <div class="step-title">おすすめ初期設定</div>
+      </div>
+      <div class="step-body" id="body-mac-5">
+        <p><strong>① テーマ（画面の色）を選ぶ</strong></p>
+        <p>起動直後にこんな選択画面が出ます。<strong>↑↓キー</strong>で好みの色を選んで <strong>Enter</strong>！</p>
+        <div class="illust">
+          <img src="theme-select.png" alt="テーマ選択画面">
+        </div>
+        <div class="info-box">💡 あとから変えたいときは <code>/theme</code> と入力するだけで再選択できます。</div>
+
+        <p style="margin-top:20px;"><strong>② 日本語で話しかけるだけで OK！</strong></p>
+        <p>特別な設定は不要です。<strong>日本語で入力すれば日本語で答えてくれます。</strong></p>
+        <div class="code-block">
+          <code>自己紹介サイトを作って</code>
+          <button class="copy-btn" onclick="copyCode(this, '自己紹介サイトを作って')">コピー</button>
+        </div>
+
+        <p style="margin-top:20px;"><strong>③ まずはプランモードで始めよう</strong></p>
+        <p>いきなり作り始めるより、<strong>先に計画を立ててもらう</strong>のがおすすめです。<br>
+        作りたいものを伝える前に <code>/plan</code> と入力すると、Claude が実装手順を提示してから動き始めます。</p>
+        <div class="code-block">
+          <code>/plan</code>
+          <button class="copy-btn" onclick="copyCode(this, '/plan')">コピー</button>
+        </div>
+        <div class="info-box">💡 プランを確認してから「進めて」と言えば、思った通りに作ってくれます。</div>
+      </div>
+      <div class="step-body hidden" id="body-windows-5">
+        <p><strong>① テーマ（画面の色）を選ぶ</strong></p>
+        <p>起動直後にこんな選択画面が出ます。<strong>↑↓キー</strong>で好みの色を選んで <strong>Enter</strong>！</p>
+        <div class="illust">
+          <img src="theme-select.png" alt="テーマ選択画面">
+        </div>
+        <div class="info-box">💡 あとから変えたいときは <code>/theme</code> と入力するだけで再選択できます。</div>
+
+        <p style="margin-top:20px;"><strong>② 日本語で話しかけるだけで OK！</strong></p>
+        <p>特別な設定は不要です。<strong>日本語で入力すれば日本語で答えてくれます。</strong></p>
+
+        <p style="margin-top:20px;"><strong>③ まずはプランモードで始めよう</strong></p>
+        <p>作りたいものを伝える前に <code>/plan</code> と入力すると、Claude が計画を立ててから実行します。</p>
+        <div class="code-block">
+          <code>/plan</code>
+          <button class="copy-btn" onclick="copyCode(this, '/plan')">コピー</button>
+        </div>
+        <div class="info-box">💡 プランを確認してから「進めて」と言えば、思った通りに作ってくれます。</div>
+      </div>
+      <button class="check-btn" onclick="completeStep(5)">✓ 設定できた！完了</button>
     </div>
 
     <!-- 完了 -->
     <div class="complete-box" id="completeBox">
       <div class="emoji">🎉</div>
       <h2>セットアップ完了！</h2>
-      <p>日本語で話しかけるだけで OK です！</p>
-      <div class="next-steps">
-        <h3>💬 試しに入力してみよう</h3>
-        <div class="code-block">
-          <code>自己紹介サイトを作って</code>
-          <button class="copy-btn" onclick="copyCode(this, '自己紹介サイトを作って')">コピー</button>
-        </div>
-        <div class="code-block">
-          <code>TODOアプリを作って</code>
-          <button class="copy-btn" onclick="copyCode(this, 'TODOアプリを作って')">コピー</button>
-        </div>
-      </div>
+      <p>準備完了です！さっそく話しかけてみてください。</p>
     </div>
 
   </div>
 
   <script>
-    const TOTAL = 4;
+    const TOTAL = 5;
     const done = new Set();
 
     const observer = new IntersectionObserver(entries => {
