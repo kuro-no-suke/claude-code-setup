@@ -254,6 +254,49 @@
     a:hover { color: #93c5fd; text-decoration: underline; }
     .hidden { display: none !important; }
 
+    /* 折りたたみセクション */
+    .foldable {
+      width: 100%;
+      max-width: 680px;
+      margin-bottom: 12px;
+    }
+    .foldable summary {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 16px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #c4b5fd;
+      list-style: none;
+      transition: border-color 0.2s;
+    }
+    .foldable summary::-webkit-details-marker { display: none; }
+    .foldable summary::before { content: "▶ "; font-size: 0.8rem; }
+    .foldable[open] summary::before { content: "▼ "; }
+    .foldable[open] summary { border-radius: 12px 12px 0 0; }
+    .foldable summary:hover { border-color: #a78bfa55; }
+    .fold-content {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 20px;
+      color: #999;
+      line-height: 1.9;
+      font-size: 0.92rem;
+    }
+    .fold-content dt {
+      color: #fbbf24;
+      font-weight: 600;
+      margin-top: 14px;
+    }
+    .fold-content dt:first-child { margin-top: 0; }
+    .fold-content dd { margin-left: 0; margin-bottom: 6px; }
+    .glossary-term { color: #60a5fa; font-weight: 600; }
+    .glossary-desc { margin-bottom: 12px; }
+
     /* 完了画面 */
     .complete-box {
       text-align: center;
@@ -300,7 +343,7 @@
   <div class="hero">
     <div class="badge">👋 非エンジニア向け・Node.js 不要</div>
     <h1>Claude Code セットアップガイド</h1>
-    <p class="subtitle">4ステップ、コピペするだけで完了！</p>
+    <p class="subtitle">5ステップ、コピペするだけで完了！</p>
     <div class="demo-img">
       <img src="https://github.com/anthropics/claude-code/raw/refs/heads/main/demo.gif" alt="Claude Code デモ" loading="lazy">
     </div>
@@ -322,7 +365,7 @@
   <!-- プログレス -->
   <div class="progress-wrap">
     <div class="progress-info">
-      <span id="progressText">0 / 4 ステップ完了</span>
+      <span id="progressText">0 / 5 ステップ完了</span>
       <span class="progress-pct" id="progressPct">0%</span>
     </div>
     <div class="progress-bar-track">
@@ -339,17 +382,31 @@
         <div class="step-title" id="title-1">ターミナルを開く</div>
       </div>
       <div class="step-body" id="body-mac-1">
+        <div class="info-box">💡 ターミナルとは？ キーボードでパソコンに指示を出す道具です。マウスの代わりに文字で操作します。</div>
         <p><strong>⌘ + Space</strong> を押して「ターミナル」と入力 → Enter</p>
         <div class="illust">
           <img src="spotlight.png" alt="Spotlight でターミナルを検索">
         </div>
         <p>こんな画面が開いたら OK です！<br><span style="color:#666;font-size:0.85rem;">※ 黒い画面の場合も白い画面の場合もあります。どちらでも問題ありません。</span></p>
         <div class="illust">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Terminal_Running_Top_on_macOS_Sonoma.png" alt="macOS ターミナル">
+          <svg viewBox="0 0 660 120" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;">
+            <rect width="660" height="120" fill="#1a1a1a"/>
+            <rect width="660" height="28" fill="#2a2a2a"/>
+            <circle cx="16" cy="14" r="5" fill="#ff5f57"/>
+            <circle cx="32" cy="14" r="5" fill="#febc2e"/>
+            <circle cx="48" cy="14" r="5" fill="#28c840"/>
+            <text x="280" y="18" font-family="system-ui" font-size="11" fill="#888" text-anchor="middle">ターミナル</text>
+            <text x="14" y="56" font-family="monospace" font-size="12" fill="#4ade80">user@MacBook</text>
+            <text x="130" y="56" font-family="monospace" font-size="12" fill="#60a5fa"> ~ </text>
+            <text x="152" y="56" font-family="monospace" font-size="12" fill="#aaa">% </text>
+            <rect x="168" y="45" width="8" height="15" fill="#aaa" opacity="0.6"/>
+            <text x="14" y="96" font-family="monospace" font-size="11" fill="#555">↑ この画面が出たら成功！ここに文字を入力していきます</text>
+          </svg>
         </div>
+        <p><code>pwd</code> と入力して Enter を押すと「今いる場所」が表示されます。迷子になったら試してみてください。</p>
       </div>
       <div class="step-body hidden" id="body-windows-1">
-        <div class="warn-box">⚠️ Windows は公式サポート外です。Mac を推奨します。</div>
+        <div class="info-box">💡 Windows でも試せますが、Mac のほうがスムーズに進みます。</div>
         <p>スタートボタンを<strong>右クリック</strong> → 「PowerShell（管理者）」をクリック</p>
       </div>
       <button class="check-btn" onclick="completeStep(1)">✓ 開けた！次へ</button>
@@ -359,10 +416,17 @@
     <div class="step-card" id="card-2">
       <div class="step-header">
         <div class="step-num" id="num-2">2</div>
-        <div class="step-title">Claude Code をインストール</div>
+        <div class="step-title">Git を確認して Claude Code をインストール</div>
       </div>
       <div class="step-body" id="body-mac-2">
-        <p>以下をターミナルにコピペして Enter！</p>
+        <p>Git は、Claude Code が内部で使う道具です。今入っているか確認します。以下を入力して Enter：</p>
+        <div class="code-block">
+          <code>git --version</code>
+          <button class="copy-btn" onclick="copyCode(this, 'git --version')">コピー</button>
+        </div>
+        <div class="warn-box">⚠️ 「コマンドライン・デベロッパツールが必要です」というポップアップが出たら → <strong>「インストール」をクリック</strong>してください（数分かかります）。<br>インストール後、もう一度 <code>git --version</code> を実行してバージョンが表示されれば OK です。<br>
+        既にバージョンが表示された方はそのまま次へ進んでください。</div>
+        <p style="margin-top:16px;"><strong>次に Claude Code をインストールします。</strong>以下をコピペして Enter！</p>
         <div class="code-block">
           <code>curl -fsSL https://claude.ai/install.sh | bash</code>
           <button class="copy-btn" onclick="copyCode(this, 'curl -fsSL https://claude.ai/install.sh | bash')">コピー</button>
@@ -395,8 +459,9 @@
           <button class="copy-btn" onclick="copyCode(this, 'irm https://claude.ai/install.ps1 | iex')">コピー</button>
         </div>
         <p>文字が流れて止まったら完了です。</p>
-        <p style="margin-top:16px;"><strong>③ Path（環境変数）の設定</strong></p>
-        <p>インストール後、以下のフォルダを Path に追加する必要があります：</p>
+        <p style="margin-top:16px;"><strong>③ claude が動かない場合：Path（環境変数）の設定</strong></p>
+        <p>次の STEP 3 で <code>claude</code> と入力してエラーが出た場合のみ、以下の設定が必要です。<br>問題なければここはスキップして OK です。</p>
+        <p>以下のフォルダを Path に追加します：</p>
         <div class="code-block">
           <code>C:\Users\【ユーザー名】\.local\bin</code>
           <button class="copy-btn" onclick="copyCode(this, 'C:\\Users\\【ユーザー名】\\.local\\bin')">コピー</button>
@@ -419,7 +484,13 @@
         <div class="step-title">Claude Code を起動する</div>
       </div>
       <div class="step-body" id="body-mac-3">
-        <p>ターミナルに入力して Enter！</p>
+        <p>Claude Code は<strong>今いるフォルダの中</strong>にファイルを作ります。まず専用フォルダを作って移動しましょう：</p>
+        <div class="code-block">
+          <code>mkdir claude-practice &amp;&amp; cd claude-practice</code>
+          <button class="copy-btn" onclick="copyCode(this, 'mkdir claude-practice && cd claude-practice')">コピー</button>
+        </div>
+        <div class="info-box">💡 <code>claude-practice</code> の部分は好きな名前に変えて OK です。フォルダ名は半角英数字で付けるのがおすすめです。<br>このフォルダ名はあとで再開するときにも使います。覚えておいてください。</div>
+        <p>では起動します！以下を入力して Enter：</p>
         <div class="code-block">
           <code>claude</code>
           <button class="copy-btn" onclick="copyCode(this, 'claude')">コピー</button>
@@ -432,7 +503,7 @@
           <div class="illust" style="margin:8px 0;">
             <img src="command-not-found.png" alt="command not found エラー" style="border-radius:8px;border:1px solid #333;">
           </div>
-          まずターミナルを一度閉じて開き直してください。<br>それでも出る場合は以下をコピペして Enter！
+          まずターミナルを一度閉じて開き直してください。<br>それでも出る場合は、Claude の場所をターミナルに教える設定が必要です。以下をコピペして Enter！
           <div class="code-block" style="margin-top:8px;">
             <code>echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc</code>
             <button class="copy-btn" onclick="copyPathFix(this)">コピー</button>
@@ -440,7 +511,13 @@
         </div>
       </div>
       <div class="step-body hidden" id="body-windows-3">
-        <p>PowerShell に入力して Enter！</p>
+        <p>Claude Code は<strong>今いるフォルダの中</strong>にファイルを作ります。まず専用フォルダを作って移動しましょう：</p>
+        <div class="code-block">
+          <code>mkdir claude-practice; cd claude-practice</code>
+          <button class="copy-btn" onclick="copyCode(this, 'mkdir claude-practice; cd claude-practice')">コピー</button>
+        </div>
+        <div class="info-box">💡 <code>claude-practice</code> の部分は好きな名前に変えて OK です。フォルダ名は半角英数字で付けるのがおすすめです。<br>このフォルダ名はあとで再開するときにも使います。覚えておいてください。</div>
+        <p>では起動します！以下を入力して Enter：</p>
         <div class="code-block">
           <code>claude</code>
           <button class="copy-btn" onclick="copyCode(this, 'claude')">コピー</button>
@@ -485,7 +562,15 @@
         この画面が出たらログイン完了です。</p>
         <div class="illust"><img src="setup-complete.jpg" alt="設定完了画面"></div>
 
-        <div class="info-box">💡 完了後はターミナルを一度閉じて開き直してから <code>claude</code> を起動してください。</div>
+        <div class="info-box">💡 完了後はターミナルを一度閉じて開き直してください。<br>
+          次回からも、Claude Code を使うときは同じフォルダに移動してから起動します。<br>
+          さっき <code>claude-practice</code> という名前で作った場合は、以下を入力します：
+          <div class="code-block" style="margin-top:8px;">
+            <code>cd claude-practice &amp;&amp; claude</code>
+            <button class="copy-btn" onclick="copyCode(this, 'cd claude-practice && claude')">コピー</button>
+          </div>
+          <span style="font-size:0.85rem;">※ フォルダ名を別の名前にした方は、<code>claude-practice</code> を自分のフォルダ名に置き換えてください。</span><br><br>
+          次は「おすすめ初期設定」に進んで、Plan mode の使い方だけ覚えれば OK です。</div>
       </div>
       <div class="step-body hidden" id="body-windows-4">
         <div class="warn-box">⚠️ Claude Code の利用には <strong>Pro 以上のプラン（月 $20〜）</strong>が必要です。</div>
@@ -513,7 +598,15 @@
         この画面が出たらログイン完了です。</p>
         <div class="illust"><img src="setup-complete.jpg" alt="設定完了画面"></div>
 
-        <div class="info-box">💡 完了後はPowerShellを一度閉じて開き直してから <code>claude</code> を起動してください。</div>
+        <div class="info-box">💡 完了後はPowerShellを一度閉じて開き直してください。<br>
+          次回からも、Claude Code を使うときは同じフォルダに移動してから起動します。<br>
+          さっき <code>claude-practice</code> という名前で作った場合は、以下を入力します：
+          <div class="code-block" style="margin-top:8px;">
+            <code>cd claude-practice; claude</code>
+            <button class="copy-btn" onclick="copyCode(this, 'cd claude-practice; claude')">コピー</button>
+          </div>
+          <span style="font-size:0.85rem;">※ フォルダ名を別の名前にした方は、<code>claude-practice</code> を自分のフォルダ名に置き換えてください。</span><br><br>
+          次は「おすすめ初期設定」に進んで、Plan mode の使い方だけ覚えれば OK です。</div>
       </div>
       <button class="check-btn" onclick="completeStep(4)">✓ ログインできた！次へ</button>
     </div>
@@ -525,82 +618,120 @@
         <div class="step-title">おすすめ初期設定</div>
       </div>
       <div class="step-body" id="body-mac-5">
-        <p><strong>① テーマ（画面の色）を選ぶ</strong></p>
+        <p><strong>① まずはプランモードで始めよう</strong></p>
+        <p>いきなり作り始めるより、<strong>先に計画を立ててもらう</strong>のがおすすめです。<br>
+        入力欄で <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.9rem;">⇧</kbd> + <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.85rem;">Tab</kbd> を押すとモードが切り替わります。<strong>「Plan mode」</strong>になったら送信！</p>
+        <div class="info-box">💡 <code>/plan</code> と入力して Enter でも同じく Plan モードになります。<br>プランを確認してから「進めて」と言えば、思った通りに作ってくれます。</div>
+
+        <p style="margin-top:20px;"><strong>② 2回目以降の起動方法</strong></p>
+        <div class="info-box" style="border-left-color: #f472b6; background: #1a0a14;">
+          <strong style="color: #f472b6;">🏠 ターミナルを閉じると場所がリセットされます</strong><br>
+          ターミナルを開いた直後は「ホーム（玄関）」にいる状態です。<br>
+          Claude Code を使うには、自分の作業フォルダ（部屋）に移動してから起動します。<br>
+          次に使うときは、<strong>これだけ打てば再開できます：</strong>
+          <div class="code-block" style="margin-top:8px;">
+            <code>cd claude-practice &amp;&amp; claude</code>
+            <button class="copy-btn" onclick="copyCode(this, 'cd claude-practice && claude')">コピー</button>
+          </div>
+          <span style="font-size:0.85rem;">※ フォルダ名を変えた方は <code>claude-practice</code> を自分の名前に置き換えてください。<br>
+          ※ <code>pwd</code> と入力すると今いる場所を確認できます。</span>
+        </div>
+
+        <p style="margin-top:20px;"><strong>③ テーマ（画面の色）を選ぶ</strong></p>
         <p>起動直後にこんな選択画面が出ます。<strong>↑↓キー</strong>で好みの色を選んで <strong>Enter</strong>！</p>
         <div class="illust">
           <img src="theme-select.png" alt="テーマ選択画面">
         </div>
         <div class="info-box">💡 あとから変えたいときは <code>/theme</code> と入力するだけで再選択できます。</div>
 
-        <p style="margin-top:20px;"><strong>② 日本語で話しかけるだけで OK！</strong></p>
+        <p style="margin-top:20px;"><strong>④ 日本語で話しかけるだけで OK！</strong></p>
         <p>特別な設定は不要です。<strong>日本語で入力すれば日本語で答えてくれます。</strong></p>
         <div class="code-block">
           <code>自己紹介サイトを作って</code>
           <button class="copy-btn" onclick="copyCode(this, '自己紹介サイトを作って')">コピー</button>
         </div>
-
-        <p style="margin-top:20px;"><strong>③ フォルダを作ってから起動しよう</strong></p>
-        <p>Claude Code は<strong>今いるフォルダの中</strong>にファイルを作ります。<br>
-        プロジェクトごとに専用フォルダを作ってから起動するのがおすすめです。</p>
-        <div class="code-block">
-          <code>mkdir my-project && cd my-project && claude</code>
-          <button class="copy-btn" onclick="copyCode(this, 'mkdir my-project && cd my-project && claude')">コピー</button>
-        </div>
-        <div class="info-box">💡 <code>my-project</code> の部分は好きな名前に変えて OK です。</div>
-
-        <p style="margin-top:12px;"><strong>続きから再開したいときは？</strong><br>
-        次回以降はフォルダに移動してから <code>claude</code> を起動するだけです。</p>
-        <div class="code-block">
-          <code>cd my-project && claude</code>
-          <button class="copy-btn" onclick="copyCode(this, 'cd my-project && claude')">コピー</button>
-        </div>
-
-        <div class="info-box" style="margin-top:12px;">🚀 <strong>もっと楽に起動したい方へ：ランチャーファイルを作ろう</strong><br>
-        プロジェクトフォルダに置いておくと、<strong>ダブルクリックするだけで</strong>そのフォルダでClaude Codeが起動するファイルを作れます。<br><br>
-        以下のファイルをダウンロードして、プロジェクトフォルダに入れてください：<br>
-        <a href="https://kuro-no-suke.github.io/claude-code-setup/launch_claude.command" download style="color:#a78bfa;font-weight:bold;">⬇ launch_claude.command をダウンロード</a><br><br>
-        ダウンロード後、ファイルを右クリック →「開く」で初回だけ実行許可を与えてください。<br>
-        以降はダブルクリックするだけで OK です！</div>
-
-        <p style="margin-top:20px;"><strong>④ まずはプランモードで始めよう</strong></p>
-        <p>いきなり作り始めるより、<strong>先に計画を立ててもらう</strong>のがおすすめです。<br>
-        入力欄で <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.9rem;">⇧</kbd> + <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.85rem;">Tab</kbd> を押すとモードが切り替わります。<strong>「Plan mode」</strong>になったら送信！</p>
-        <div class="info-box">💡 <code>/plan</code> と入力して Enter でも同じく Plan モードになります。<br>プランを確認してから「進めて」と言えば、思った通りに作ってくれます。</div>
       </div>
       <div class="step-body hidden" id="body-windows-5">
-        <p><strong>① テーマ（画面の色）を選ぶ</strong></p>
+        <p><strong>① まずはプランモードで始めよう</strong></p>
+        <p>入力欄で <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.85rem;">Shift</kbd> + <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.85rem;">Tab</kbd> を押すとモードが切り替わります。<strong>「Plan mode」</strong>になったら送信！</p>
+        <div class="info-box">💡 <code>/plan</code> と入力して Enter でも同じく Plan モードになります。<br>プランを確認してから「進めて」と言えば、思った通りに作ってくれます。</div>
+
+        <p style="margin-top:20px;"><strong>② 2回目以降の起動方法</strong></p>
+        <div class="info-box" style="border-left-color: #f472b6; background: #1a0a14;">
+          <strong style="color: #f472b6;">🏠 PowerShell を閉じると場所がリセットされます</strong><br>
+          PowerShell を開いた直後は「ホーム（玄関）」にいる状態です。<br>
+          Claude Code を使うには、自分の作業フォルダ（部屋）に移動してから起動します。<br>
+          次に使うときは、<strong>これだけ打てば再開できます：</strong>
+          <div class="code-block" style="margin-top:8px;">
+            <code>cd claude-practice; claude</code>
+            <button class="copy-btn" onclick="copyCode(this, 'cd claude-practice; claude')">コピー</button>
+          </div>
+          <span style="font-size:0.85rem;">※ フォルダ名を変えた方は <code>claude-practice</code> を自分の名前に置き換えてください。</span>
+        </div>
+
+        <p style="margin-top:20px;"><strong>③ テーマ（画面の色）を選ぶ</strong></p>
         <p>起動直後にこんな選択画面が出ます。<strong>↑↓キー</strong>で好みの色を選んで <strong>Enter</strong>！</p>
         <div class="illust">
           <img src="theme-select.png" alt="テーマ選択画面">
         </div>
         <div class="info-box">💡 あとから変えたいときは <code>/theme</code> と入力するだけで再選択できます。</div>
 
-        <p style="margin-top:20px;"><strong>② 日本語で話しかけるだけで OK！</strong></p>
+        <p style="margin-top:20px;"><strong>④ 日本語で話しかけるだけで OK！</strong></p>
         <p>特別な設定は不要です。<strong>日本語で入力すれば日本語で答えてくれます。</strong></p>
-
-        <p style="margin-top:20px;"><strong>③ フォルダを作ってから起動しよう</strong></p>
-        <p>Claude Code は<strong>今いるフォルダの中</strong>にファイルを作ります。<br>
-        プロジェクトごとに専用フォルダを作ってから起動するのがおすすめです。</p>
-        <div class="code-block">
-          <code>mkdir my-project; cd my-project; claude</code>
-          <button class="copy-btn" onclick="copyCode(this, 'mkdir my-project; cd my-project; claude')">コピー</button>
-        </div>
-        <div class="info-box">💡 <code>my-project</code> の部分は好きな名前に変えて OK です。</div>
-
-        <p style="margin-top:12px;"><strong>続きから再開したいときは？</strong><br>
-        次回以降はフォルダに移動してから <code>claude</code> を起動するだけです。</p>
-        <div class="code-block">
-          <code>cd my-project; claude</code>
-          <button class="copy-btn" onclick="copyCode(this, 'cd my-project; claude')">コピー</button>
-        </div>
-
-        <p style="margin-top:20px;"><strong>④ まずはプランモードで始めよう</strong></p>
-        <p>入力欄で <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.85rem;">Shift</kbd> + <kbd style="background:#2a2a3a;border:1px solid #444;border-radius:4px;padding:1px 6px;font-size:0.85rem;">Tab</kbd> を押すとモードが切り替わります。<strong>「Plan mode」</strong>になったら送信！</p>
-        <div class="info-box">💡 <code>/plan</code> と入力して Enter でも同じく Plan モードになります。<br>プランを確認してから「進めて」と言えば、思った通りに作ってくれます。</div>
       </div>
       <button class="check-btn" onclick="completeStep(5)">✓ 設定できた！完了</button>
     </div>
 
+  </div><!-- /.steps -->
+
+  <!-- トラブルシューティング -->
+  <details class="foldable" style="margin-top: 24px;">
+    <summary>困ったときは（トラブルシューティング）</summary>
+    <div class="fold-content">
+      <dl>
+        <dt>「command not found」と表示される</dt>
+        <dd>ターミナルを一度閉じて、開き直してからもう一度試してください。<br>
+          Mac の場合、<code>~/.local/bin</code> が PATH に含まれていない可能性があります。STEP 3 の info-box にある PATH 修正コマンドを試してください。</dd>
+
+        <dt>「permission denied」と表示される</dt>
+        <dd>表示されたエラーメッセージをよく読み、どのファイルやフォルダで問題が起きているか確認してください。PATH や権限の設定を見直す必要がある場合があります。</dd>
+
+        <dt>今どこにいるかわからなくなった</dt>
+        <dd><code>pwd</code> と入力すると今いる場所が表示されます。<br>
+          ホーム（最初の場所）に戻りたいときは <code>cd ~</code> と入力してください。</dd>
+
+        <dt>PATH 修正コマンドを実行したのに直らない</dt>
+        <dd>古い Mac を使っている場合、シェルが <code>bash</code> の可能性があります。<code>~/.zshrc</code> を <code>~/.bash_profile</code> に変えて同じコマンドを試してください。</dd>
+
+        <dt>「コマンドライン・デベロッパツール」のポップアップが出た</dt>
+        <dd>Mac で Git を使うために必要なツールです。<strong>「インストール」をクリック</strong>してください。数分で完了します。</dd>
+
+        <dt>画面が固まって動かない</dt>
+        <dd>インストール中は文字が流れずに止まって見えることがあります。まずは 3〜5 分ほど待ってみてください。<br>
+          それでもダメなら <code>Ctrl + C</code> で中断し、もう一度コマンドを実行してください。</dd>
+      </dl>
+    </div>
+  </details>
+
+  <!-- 用語解説 -->
+  <details class="foldable">
+    <summary>用語解説</summary>
+    <div class="fold-content">
+      <p><span class="glossary-term">ターミナル（Mac）/ PowerShell（Windows）</span></p>
+      <p class="glossary-desc">キーボードでパソコンに指示を出すための道具。マウスの代わりに文字で操作します。</p>
+
+      <p><span class="glossary-term">Git</span></p>
+      <p class="glossary-desc">ファイルの変更履歴を記録する道具。「いつ・何を変えたか」を自動で覚えてくれます。Claude Code が内部で使っています。</p>
+
+      <p><span class="glossary-term">パス（PATH）</span></p>
+      <p class="glossary-desc">パソコンの中のファイルやフォルダの「住所」のこと。例：<code>/Users/あなたの名前/Documents</code></p>
+
+      <p><span class="glossary-term">コマンド</span></p>
+      <p class="glossary-desc">ターミナルに入力する「指示の文」のこと。例：<code>pwd</code>（今いる場所を表示）、<code>cd</code>（フォルダを移動）</p>
+    </div>
+  </details>
+
+  <div class="steps">
     <!-- 完了 -->
     <div class="complete-box" id="completeBox">
       <div class="emoji">🎉</div>
