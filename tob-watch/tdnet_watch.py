@@ -25,6 +25,7 @@ SIGNALS = os.path.join(BASE, "signals.csv")
 REPORTS = os.path.join(BASE, "reports")
 JST = dt.timezone(dt.timedelta(hours=9))
 SCORE_WINDOW_DAYS = 90
+HALF_LIFE_DAYS = 30  # この日数がたったサインは点数が半分になる
 
 # (種類, 点数, 正規表現)。上から順に判定し、1つの開示に複数の種類が付くことがある。
 # 点数は「TOB・非上場化の予兆としての強さ」。0 はイベントそのもの・参考情報。
@@ -124,12 +125,26 @@ def scores(signals, wl, today):
     """ウォッチリスト銘柄の予兆スコア。TOB・MBOがすでに発表された銘柄は除く。"""
     since = (today - dt.timedelta(days=SCORE_WINDOW_DAYS)).isoformat()
     done = announced(signals, since)
-    sc = {}
+    # 1) 1件の開示（同じ日・銘柄・表題）に複数のサインが付いたら、一番高い点数だけを採る
+    per_doc = {}
     for r in signals:
         if r["date"] >= since and r["code"] in wl and r["code"] not in done and int(r["points"]) > 0:
-            s = sc.setdefault(r["code"], {"score": 0, "signals": []})
-            s["score"] += int(r["points"])
-            s["signals"].append(f'{r["date"][5:]} {r["signal"]}')
+            k = (r["code"], r["date"], r["title"])
+            if k not in per_doc or int(r["points"]) > int(per_doc[k]["points"]):
+                per_doc[k] = r
+    # 2) 同じ日・同じ銘柄・同じ種類のサインは1回だけ数える
+    per_day = {}
+    for r in per_doc.values():
+        per_day.setdefault((r["code"], r["date"], r["signal"]), r)
+    # 3) 古いサインほど軽くする（HALF_LIFE_DAYS で半分）
+    sc = {}
+    for r in sorted(per_day.values(), key=lambda r: r["date"]):
+        age = (today - dt.date.fromisoformat(r["date"])).days
+        s = sc.setdefault(r["code"], {"score": 0.0, "signals": []})
+        s["score"] += int(r["points"]) * 0.5 ** (max(age, 0) / HALF_LIFE_DAYS)
+        s["signals"].append(f'{r["date"][5:]} {r["signal"]}')
+    for s in sc.values():
+        s["score"] = round(s["score"], 1)
     return sorted(sc.items(), key=lambda kv: -kv[1]["score"])
 
 
