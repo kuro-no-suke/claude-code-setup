@@ -34,6 +34,8 @@ RULES = [
     ("TOB結果", 0, r"公開買付けの結果"),
     ("完全子会社化・統合", 0, r"完全子会社化|株式交換|経営統合|株式移転|吸収合併"),
     ("特別委員会", 4, r"特別委員会"),
+    # 5%以上をまとめて買い集める行為（創業家の資産管理会社による集約など）。MBOの受け皿づくりになりうる
+    ("買集め行為", 4, r"買集め行為"),
     ("親会社・主要株主の異動", 3, r"親会社.{0,6}異動|主要株主.{0,8}異動|その他の関係会社.{0,4}異動"),
     ("株主優待の廃止", 3, r"株主優待.{0,10}(廃止|終了)"),
     ("配当の未定化・無配", 3, r"無配|配当予想.{0,10}未定"),
@@ -167,6 +169,8 @@ def fmt(r, wl):
         if w.get("pbr"):
             tag += f' / PBR {w["pbr"]}'
         tag += "]**"
+        if w.get("note"):
+            tag += f' （メモ: {w["note"]}）'
     link = f' ([PDF]({r["pdf"]}))' if r["pdf"] else ""
     return f'- {r["time"]} {r["code"]} {r["name"]}{tag}: {r["title"]}{link}'
 
@@ -205,11 +209,11 @@ def write_report(iso, items, new, signals, wl):
     lines.append(f"## 予兆スコア上位（ウォッチリスト、直近{SCORE_WINDOW_DAYS}日）")
     top = scores(signals, wl, today)[:20]
     if top:
-        lines.append("| コード | 銘柄 | 区分 | スコア | サイン |")
-        lines.append("|---|---|---|---|---|")
+        lines.append("| コード | 銘柄 | 区分 | スコア | サイン | メモ |")
+        lines.append("|---|---|---|---|---|---|")
         for code, s in top:
             w = wl[code]
-            lines.append(f'| {code} | {w["name"]} | {w["group"]} | {s["score"]} | {"、".join(s["signals"][-4:])} |')
+            lines.append(f'| {code} | {w["name"]} | {w["group"]} | {s["score"]} | {"、".join(s["signals"][-4:])} | {w.get("note") or ""} |')
     else:
         lines.append("なし")
     lines.append("")
