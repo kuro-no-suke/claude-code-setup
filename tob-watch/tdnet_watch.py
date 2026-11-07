@@ -48,9 +48,19 @@ RULES = [
     ("自己株式の公開買付", 1, r"自己株式の公開買付"),
     ("業績の上方修正", 0, r"上方修正"),
     ("増配", 0, r"増配"),
-    ("リスク", 0, r"取立不能|取立遅延|債務超過|継続企業の前提|不適切な会計|特別調査委員会"),
+    # 以下は主に成長株ウォッチ用（予兆スコアには入らない）
+    ("自社株買い", 0, r"自己株式の取得(に係る|に関する|及び|および|枠)"),
+    ("売出し・増資", 0, r"売出し|公募|新株式発行|ロックアップ"),
+    ("新株予約権・ストックオプション", 0, r"新株予約権|ストック・オプション"),
+    ("月次", 0, r"月次"),
+    ("リスク", 0, r"取立不能|取立遅延|債務超過|継続企業の前提|不適切な会計|特別調査委員会"
+               r"|不正アクセス|情報流出|情報漏えい|情報漏洩|システム障害|行政処分|訴訟の提起"),
 ]
 RULES = [(n, p, re.compile(r)) for n, p, r in RULES]
+
+# 成長株にとっての好材料・悪材料（レポートの印に使う）
+GOOD_FOR_GROWTH = {"業績の上方修正", "増配", "自社株買い"}
+BAD_FOR_GROWTH = {"業績の下方修正", "売出し・増資", "リスク", "配当の未定化・無配"}
 
 
 def fetch_day(date):
@@ -178,7 +188,7 @@ def fmt(r, wl):
 def write_report(iso, items, new, signals, wl):
     today = dt.date.fromisoformat(iso)
     by = lambda pred: [r for r in new if pred(r)]
-    hits = by(lambda r: r["code"] in wl)
+    hits = by(lambda r: r["code"] in wl and wl[r["code"]]["group"] != "growth")
     events = by(lambda r: r["signal"] in ("TOB・MBO発表", "TOB結果", "完全子会社化・統合", "非上場化の手続き"))
     omens = by(lambda r: int(r["points"]) > 0 and r["code"] not in wl)
     risks = by(lambda r: r["signal"] == "リスク")
@@ -201,7 +211,21 @@ def write_report(iso, items, new, signals, wl):
             lines.append(empty)
         lines.append("")
 
-    section("ウォッチリスト銘柄の開示", hits)
+    section("ウォッチリスト銘柄の開示（割安・TOB狙い）", hits)
+
+    # 成長株ウォッチ：分類できない開示（決算短信など）も含めて、成長株の開示はすべて載せる
+    lines.append("## 成長株ウォッチ（成長株リストの全開示）")
+    grow = [it for it in items if wl.get(it[1], {}).get("group") == "growth"]
+    if grow:
+        for t, code, name, title, pdf in grow:
+            sigs = {n for n, _ in classify(title)}
+            mark = "⚠️" if sigs & BAD_FOR_GROWTH else ("✅" if sigs & GOOD_FOR_GROWTH else "・")
+            link = f" ([PDF]({pdf}))" if pdf else ""
+            tag = f'  `{" / ".join(sorted(sigs))}`' if sigs else ""
+            lines.append(f"- {mark} {t} {code} {name}: {title}{link}{tag}")
+    else:
+        lines.append("なし")
+    lines.append("")
     section("TOB・MBO・完全子会社化（市場全体）", events)
     section("予兆サイン（ウォッチリスト外）", omens)
     section("リスク開示", risks)
