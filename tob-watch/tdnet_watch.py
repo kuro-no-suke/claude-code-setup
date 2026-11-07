@@ -19,6 +19,9 @@ import sys
 import time
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import technical  # noqa: E402
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 WATCHLIST = os.path.join(BASE, "watchlist.tsv")
 SIGNALS = os.path.join(BASE, "signals.csv")
@@ -185,7 +188,85 @@ def fmt(r, wl):
     return f'- {r["time"]} {r["code"]} {r["name"]}{tag}: {r["title"]}{link}'
 
 
-def write_report(iso, items, new, signals, wl):
+CANDIDATE_WINDOW_DAYS = 30
+FUND_POINTS = {"業績の上方修正": 2, "増配": 1, "自社株買い": 1}
+
+
+def fmt_ratio(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
+
+
+def technical_sections(signals, wl, today, tech):
+    """ファンダメンタルズ（割安さ・業績の勢い・予兆）とテクニカルを合わせた2つの欄。"""
+    lines = []
+    since = (today - dt.timedelta(days=CANDIDATE_WINDOW_DAYS)).isoformat()
+    done = announced(signals, (today - dt.timedelta(days=SCORE_WINDOW_DAYS)).isoformat())
+    bad = {r["code"] for r in signals if r["date"] >= since and r["signal"] in BAD_FOR_GROWTH}
+
+    # 1) 上昇候補: 割安株側で、直近30日に好材料が出た銘柄と、予兆スコア上位10社
+    fund = {}
+    for r in signals:
+        c = r["code"]
+        if r["date"] >= since and c in wl and wl[c]["group"] != "growth" and c not in done and c not in bad \
+                and r["signal"] in FUND_POINTS:
+            f = fund.setdefault(c, {"pts": 0.0, "why": set()})
+            if (r["date"], r["signal"]) not in f["why"]:
+                f["why"].add((r["date"], r["signal"]))
+                f["pts"] += FUND_POINTS[r["signal"]]
+    for c, s in scores(signals, wl, today)[:10]:
+        if wl[c]["group"] == "growth":
+            continue
+        f = fund.setdefault(c, {"pts": 0.0, "why": set()})
+        f["pts"] += s["score"] / 2
+        f["why"].add(("", f"TOB予兆{s['score']}"))
+    rows = []
+    for c, f in fund.items():
+        w = wl[c]
+        pbr, ncr = fmt_ratio(w.get("pbr")), fmt_ratio(w.get("net_cash_ratio"))
+        cheap = (1 if pbr is not None and pbr <= 0.5 else 0) + (1 if ncr is not None and ncr >= 1 else 0)
+        t = tech.get(c)
+        total = f["pts"] + cheap + technical.tech_points(t)
+        why = "、".join(f"{d[5:]}{s}" if d else s for d, s in sorted(f["why"]))
+        rows.append((total, c, w, why, t))
+    rows.sort(key=lambda x: -x[0])
+    lines.append(f"## 上昇候補（割安＋好材料＋テクニカル、直近{CANDIDATE_WINDOW_DAYS}日）")
+    lines.append("点数 = 好材料（上方修正2・増配1・自社株買い1・TOB予兆スコアの半分）＋割安（PBR0.5倍以下1・ネットキャッシュが時価総額以上1）＋テクニカル（上昇トレンド1・押し目1・高値ブレイク1・ゴールデンクロス1／過熱-2・下降トレンド-1など）")
+    lines.append("")
+    if rows:
+        lines.append("| 点数 | コード | 銘柄 | PBR | 好材料 " + technical.TABLE_HEAD[0])
+        lines.append("|---|---|---|---|---" + technical.TABLE_HEAD[1])
+        for total, c, w, why, t in rows[:25]:
+            lines.append(f'| {total:.1f} | {c} | {w["name"]} | {w.get("pbr") or "-"} | {why} | '
+                         + " | ".join(technical.summary_cells(t)) + " |")
+    else:
+        lines.append("なし")
+    lines.append("")
+
+    # 2) 成長株のテクニカル
+    lines.append("## 成長株のテクニカル")
+    lines.append("⚠️ は直近30日に悪材料（下方修正、売出し・増資、リスク開示など）が出た銘柄。")
+    lines.append("")
+    grow = []
+    for c, w in wl.items():
+        if w["group"] == "growth":
+            t = tech.get(c)
+            grow.append((technical.tech_points(t) - (3 if c in bad else 0), c, w, t))
+    grow.sort(key=lambda x: -x[0])
+    lines.append("| コード | 銘柄 " + technical.TABLE_HEAD[0])
+    lines.append("|---|---" + technical.TABLE_HEAD[1])
+    for _, c, w, t in grow:
+        mark = "⚠️ " if c in bad else ""
+        lines.append(f'| {c} | {mark}{w["name"]} | ' + " | ".join(technical.summary_cells(t)) + " |")
+    lines.append("")
+    lines.append("※テクニカルの目安: RSI 70以上は買われすぎ、30以下は売られすぎ。52週位置は1年の安値0%〜高値100%のどこにいるか。")
+    lines.append("")
+    return lines
+
+
+def write_report(iso, items, new, signals, wl, tech=None):
     today = dt.date.fromisoformat(iso)
     by = lambda pred: [r for r in new if pred(r)]
     hits = by(lambda r: r["code"] in wl and wl[r["code"]]["group"] != "growth")
@@ -246,7 +327,9 @@ def write_report(iso, items, new, signals, wl):
     lines.append(f"## ウォッチリストでTOB・MBO・非上場化の手続きが出た銘柄（直近{SCORE_WINDOW_DAYS}日、スコア対象外）")
     lines.extend([f'- {d} {c} {wl[c]["name"]}（{wl[c]["group"]}）' for d, c in hit] or ["なし"])
     lines.append("")
-    lines.append("※公表情報の機械的な分類です。投資判断はご自身で行ってください。")
+    if tech is not None:
+        lines.extend(technical_sections(signals, wl, today, tech))
+    lines.append("※公表情報と株価の機械的な分類です。投資判断はご自身で行ってください。")
     os.makedirs(REPORTS, exist_ok=True)
     path = os.path.join(REPORTS, f"{iso}.md")
     with open(path, "w", encoding="utf-8") as f:
@@ -268,12 +351,14 @@ def main():
     dates = [today] if not args else (list(daterange(args[0], args[1])) if len(args) > 1 else [args[0]])
     wl = load_watchlist()
     signals = load_signals()
+    tech = technical.Cache()
     for d in dates:
         iso, items, new = process_day(d, wl, signals)
         if not items:
             print(f"{iso}: 開示なし（休日または公開期間外）")
             continue
-        path = write_report(iso, items, new, signals, wl)
+        # 株価は「今の値」しか取れないので、テクニカル欄は最新の日付のレポートだけに付ける
+        path = write_report(iso, items, new, signals, wl, tech if d == dates[-1] else None)
         print(f"{iso}: 開示 {len(items)} 件、新しいサイン {len(new)} 件 → {os.path.relpath(path, BASE)}")
     save_signals(signals)
 
